@@ -12,8 +12,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
@@ -30,6 +35,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.thirdapp.ui.theme.ThirdAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -38,7 +47,17 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ThirdAppTheme {
-                MainScreen()
+//                MainScreen()
+                val navController = rememberNavController()
+                //NavHost 중 string 있는거...
+                NavHost(navController = navController, startDestination = "main") {
+                    composable(route = "main") {
+                        MainScreen(navController = navController)
+                    }
+                    composable(route = "analysis") {
+                        AnalysisScreen(navController = navController)
+                    }
+                }
             }
         }
     }
@@ -46,12 +65,10 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavController) {
     var height by rememberSaveable { mutableStateOf("") }
     var weight by rememberSaveable { mutableStateOf("") }
-    //RadioButtonSet() 에서 이동
     var selectedOption by rememberSaveable { mutableStateOf("Normal") }
-    //CheckBoxSet() 에서 이동
     var checked by rememberSaveable { mutableStateOf(false) }
 
 
@@ -85,11 +102,56 @@ fun MainScreen() {
 
             Spacer(modifier = Modifier.padding(vertical = 16.dp))
             Text(text = "Choose the analysis style.")
-            //상태 호이스팅으로 변경
             RadioButtonSet(selectedOption = selectedOption, onChange = { selectedOption = it })
 
             Spacer(modifier = Modifier.padding(vertical = 16.dp))
             CheckBoxSet(checked = checked, onChange = { checked = it })
+
+            //버튼 하나 생성...
+            //  버튼 하나 누르면 스택에 창이 하나 더 쌓이게
+            Spacer(modifier = Modifier.padding(vertical = 16.dp))
+            ElevatedButton(
+                modifier = Modifier.fillMaxWidth(),
+                //navController.navigate는 route:String 있는거
+                onClick = { navController.navigate(route = "analysis") }
+            ) {
+                Text("Enter")
+            }
+        }
+    }
+}
+
+//추가...
+//build.gradle.kts에서 (project > ThirdApp > app> build.gradle.kts)
+//    implementation(libs.androidx.navigation.compose) 추가했음
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AnalysisScreen(navController: NavController) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = { Text("Analysis Result") },
+                navigationIcon = {
+                    //navController.navigateUp() ==> 뒤로가기 버튼 눌렀을 때 뒤로가기 실행됨
+                    //  메인화면 위에 이 화면이 스택으로 쌓인거임...
+                    IconButton(onClick = {navController.navigateUp()}) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "back"
+                        )
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp)
+        ) {
+
         }
     }
 }
@@ -97,7 +159,6 @@ fun MainScreen() {
 @Composable
 fun RadioButtonSet(selectedOption: String, onChange: (String) -> Unit) {
     val radioOptions = listOf("Simplified", "Normal", "Detailed")
-//    var selectedOption by rememberSaveable { mutableStateOf(radioOptions[1]) }
 
     Column {
         radioOptions.forEach { i ->
@@ -111,47 +172,11 @@ fun RadioButtonSet(selectedOption: String, onChange: (String) -> Unit) {
                 Text(text = i)
             }
         }
-
-//        //foreach 사용하지 않은 경우
-//        Row(
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            RadioButton(
-//                selected = ("Simplified" == selectedOption),
-////                onClick = { selectedOption = "Simplified" }
-//                onClick = { onChange("Simplified") }
-//                //onChange는 위에서 구현할것임!
-//            )
-//            Text(text = "Simplified")
-//        }
-//
-//        Row(
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            RadioButton(
-//                selected = ("Normal" == selectedOption),
-////                onClick = { selectedOption = "Normal" }
-//                onClick = { onChange("Normal") }
-//            )
-//            Text(text = "Normal")
-//        }
-//
-//        Row(
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            RadioButton(
-//                selected = ("Detailed" == selectedOption),
-////                onClick = { selectedOption = "Detailed" }
-//                onClick = { onChange("Detailed") }
-//            )
-//            Text(text = "Detailed")
-//        }
     }
 }
 
 @Composable
 fun CheckBoxSet(checked: Boolean, onChange: (Boolean) -> Unit) {
-//    var checked by rememberSaveable { mutableStateOf(false) }
     Row(
         modifier = Modifier.padding(horizontal = 32.dp),
         horizontalArrangement = Arrangement.SpaceEvenly

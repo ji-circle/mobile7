@@ -66,4 +66,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //5navigation 에서 추가함
+    implementation(libs.androidx.navigation.compose)
 }

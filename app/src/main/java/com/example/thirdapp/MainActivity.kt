@@ -53,18 +53,10 @@ class MainActivity : ComponentActivity() {
                     composable(route = "main") {
                         MainScreen(navController = navController)
                     }
-//                    composable(route = "analysis") {
-                    //value 값을 이렇게 전달하겠다고 명시하는 것...
-                    //composable 안에 content:@Composable() (AnimatedContentScope.(NavBackStackEntry) -> Unit)
-                    //  NavBackStackEntry라는 것을 하나 입력받고 그것을 처리함...
-                    //value가 뒤의 람다 안의 parameter로 넘겨지게 됨...(???)
-                    composable(route = "analysis/{value}") { //i -> 이렇게 해도 되고, 생략 후 it으로 해도 됨
+                    composable(route = "analysis/{value}") {
                         AnalysisScreen(
                             navController = navController,
-                            //it 안에 value 하나만 있지 않을 수도 있음...(여기선 value 라는 것 하나만 왔지만)
-                            //  그래서 key를 "value"로 줌
                             result = it.arguments?.getString("value") ?: ""
-                            //TODO ?: 쓰는 이유, 동작 방식 찾아보기
                         )
                     }
                 }
@@ -80,7 +72,6 @@ fun MainScreen(navController: NavController) {
     var weight by rememberSaveable { mutableStateOf("") }
     var selectedOption by rememberSaveable { mutableStateOf("Normal") }
     var checked by rememberSaveable { mutableStateOf(false) }
-    //결과 저장 (비만 / 정상 등을 string으로 저장할것임)
     var result by rememberSaveable { mutableStateOf("Default") }
 
 
@@ -122,10 +113,7 @@ fun MainScreen(navController: NavController) {
             Spacer(modifier = Modifier.padding(vertical = 16.dp))
             ElevatedButton(
                 modifier = Modifier.fillMaxWidth(),
-//                onClick = { navController.navigate(route = "analysis") }
                 onClick = { navController.navigate(route = "analysis/$result") }
-                //위의 route를 통해 화면이 바뀔 때 변수, 값들을 전달해야 함!
-                //"analysis/$result" 파일이름을 같이 전달 st...
             ) {
                 Text("Enter")
             }
@@ -160,7 +148,6 @@ fun AnalysisScreen(navController: NavController, result: String) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            //result
             Text(text = "Your Obesity result is...", fontSize = 20.sp)
             Spacer(modifier = Modifier.padding(vertical = 16.dp))
             Text(text = result, fontSize = 30.sp)

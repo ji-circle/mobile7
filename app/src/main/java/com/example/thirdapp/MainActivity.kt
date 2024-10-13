@@ -63,11 +63,12 @@ class MainActivity : ComponentActivity() {
                     composable(route = "main") {
                         //뷰모델 사용할거면 아래 코드 수정한다.
 //                        MainScreen(navController = navController)
-                        MainScreen{ height, weight, selectedOption, checked -> //매개변수가 1개라서, ( ) 로 넣지 않아도 됨. 이렇게 중괄호에 바로 써도 됨
+                        MainScreen{height, weight, selectedOption, checked -> //매개변수가 1개라서, ( ) 로 넣지 않아도 됨. 이렇게 중괄호에 바로 써도 됨
                             viewModel.bmiCalculate(height, weight, selectedOption, checked)
                             // 위 코드로, viewmodel 안의 bmi 값이 업데이트된다.
                             //아래 코드에서 넘겨준다... 근데 이럴 필요가 없음! 뷰모델이 이런 스크린들 안에 있는 게 아니라, 위에 있음.
 //                            navController.navigate(route = "analysis/$bmi")
+                            navController.navigate(route = "analysis")
                         }
                     }
 //                    composable(route = "analysis/{value}") {

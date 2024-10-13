@@ -46,6 +46,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.thirdapp.ui.theme.ThirdAppTheme
 import kotlin.math.pow
 
+//TODO navigate 값 전달하면서 and 전달하지 않으면서 ==> 코드 확인하기
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

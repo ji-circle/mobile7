@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -155,10 +156,14 @@ fun AnalysisScreen(navController: NavController, result: String) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             //result
-            Text(result)
+            Text(text = "Your Obesity result is...", fontSize = 20.sp)
+            Spacer(modifier = Modifier.padding(vertical = 16.dp))
+            Text(text = result, fontSize = 30.sp)
         }
     }
 }

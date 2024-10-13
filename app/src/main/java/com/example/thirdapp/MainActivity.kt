@@ -82,7 +82,6 @@ fun MainScreen() {
             Text(text = "Choose the analysis style.")
             RadioButtonSet()
 
-            //checkbox 만들기
             Spacer(modifier = Modifier.padding(vertical = 16.dp))
             CheckBoxSet()
         }
@@ -129,15 +128,12 @@ fun RadioButtonSet() {
 
 @Composable
 fun CheckBoxSet() {
-    //상태
     var checked by rememberSaveable { mutableStateOf(false) }
     Row(
-        //여기에서 패딩 안 주면 체크박스가 너무 끝에 붙음... 텍스트는 ㄱㅊ인데
         modifier = Modifier.padding(horizontal = 32.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         Text("Do you agree to the analysis of your height and weight?")
-        //checked = checked ==> 위의 checked가 true면 이 checked도 true가 됨
         Checkbox(
             checked = checked,
             onCheckedChange = { checked = it },

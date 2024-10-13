@@ -47,15 +47,24 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ThirdAppTheme {
-//                MainScreen()
                 val navController = rememberNavController()
-                //NavHost 중 string 있는거...
                 NavHost(navController = navController, startDestination = "main") {
                     composable(route = "main") {
                         MainScreen(navController = navController)
                     }
-                    composable(route = "analysis") {
-                        AnalysisScreen(navController = navController)
+//                    composable(route = "analysis") {
+                    //value 값을 이렇게 전달하겠다고 명시하는 것...
+                    //composable 안에 content:@Composable() (AnimatedContentScope.(NavBackStackEntry) -> Unit)
+                    //  NavBackStackEntry라는 것을 하나 입력받고 그것을 처리함...
+                    //value가 뒤의 람다 안의 parameter로 넘겨지게 됨...(???)
+                    composable(route = "analysis/{value}") { //i -> 이렇게 해도 되고, 생략 후 it으로 해도 됨
+                        AnalysisScreen(
+                            navController = navController,
+                            //it 안에 value 하나만 있지 않을 수도 있음...(여기선 value 라는 것 하나만 왔지만)
+                            //  그래서 key를 "value"로 줌
+                            result = it.arguments?.getString("value") ?: ""
+                            //TODO ?: 쓰는 이유, 동작 방식 찾아보기
+                        )
                     }
                 }
             }
@@ -70,6 +79,8 @@ fun MainScreen(navController: NavController) {
     var weight by rememberSaveable { mutableStateOf("") }
     var selectedOption by rememberSaveable { mutableStateOf("Normal") }
     var checked by rememberSaveable { mutableStateOf(false) }
+    //결과 저장 (비만 / 정상 등을 string으로 저장할것임)
+    var result by rememberSaveable { mutableStateOf("Default") }
 
 
     Scaffold(
@@ -107,13 +118,13 @@ fun MainScreen(navController: NavController) {
             Spacer(modifier = Modifier.padding(vertical = 16.dp))
             CheckBoxSet(checked = checked, onChange = { checked = it })
 
-            //버튼 하나 생성...
-            //  버튼 하나 누르면 스택에 창이 하나 더 쌓이게
             Spacer(modifier = Modifier.padding(vertical = 16.dp))
             ElevatedButton(
                 modifier = Modifier.fillMaxWidth(),
-                //navController.navigate는 route:String 있는거
-                onClick = { navController.navigate(route = "analysis") }
+//                onClick = { navController.navigate(route = "analysis") }
+                onClick = { navController.navigate(route = "analysis/$result") }
+                //위의 route를 통해 화면이 바뀔 때 변수, 값들을 전달해야 함!
+                //"analysis/$result" 파일이름을 같이 전달 st...
             ) {
                 Text("Enter")
             }
@@ -121,21 +132,16 @@ fun MainScreen(navController: NavController) {
     }
 }
 
-//추가...
-//build.gradle.kts에서 (project > ThirdApp > app> build.gradle.kts)
-//    implementation(libs.androidx.navigation.compose) 추가했음
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AnalysisScreen(navController: NavController) {
+fun AnalysisScreen(navController: NavController, result: String) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = { Text("Analysis Result") },
                 navigationIcon = {
-                    //navController.navigateUp() ==> 뒤로가기 버튼 눌렀을 때 뒤로가기 실행됨
-                    //  메인화면 위에 이 화면이 스택으로 쌓인거임...
-                    IconButton(onClick = {navController.navigateUp()}) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "back"
@@ -151,7 +157,8 @@ fun AnalysisScreen(navController: NavController) {
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-
+            //result
+            Text(result)
         }
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -76,9 +78,13 @@ fun MainScreen() {
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
-            Spacer(modifier = Modifier.padding(vertical = 16.dp))  
+            Spacer(modifier = Modifier.padding(vertical = 16.dp))
             Text(text = "Choose the analysis style.")
             RadioButtonSet()
+
+            //checkbox 만들기
+            Spacer(modifier = Modifier.padding(vertical = 16.dp))
+            CheckBoxSet()
         }
     }
 }
@@ -118,5 +124,24 @@ fun RadioButtonSet() {
             )
             Text(text = "Detailed")
         }
+    }
+}
+
+@Composable
+fun CheckBoxSet() {
+    //상태
+    var checked by rememberSaveable { mutableStateOf(false) }
+    Row(
+        //여기에서 패딩 안 주면 체크박스가 너무 끝에 붙음... 텍스트는 ㄱㅊ인데
+        modifier = Modifier.padding(horizontal = 32.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Text("Do you agree to the analysis of your height and weight?")
+        //checked = checked ==> 위의 checked가 true면 이 checked도 true가 됨
+        Checkbox(
+            checked = checked,
+            onCheckedChange = { checked = it },
+            modifier = Modifier.padding(horizontal = 8.dp)
+        )
     }
 }

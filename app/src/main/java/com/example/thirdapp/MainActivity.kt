@@ -76,7 +76,7 @@ fun MainScreen() {
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
             //Spacer() = 공간을 떨어뜨려 주는...
-            Spacer(modifier = Modifier.padding(vertical = 16.dp))
+            Spacer(modifier = Modifier.padding(vertical = 16.dp))  
             Text(text = "Choose the analysis style.")
             //여기에 라디오버튼셋 추가
             RadioButtonSet()

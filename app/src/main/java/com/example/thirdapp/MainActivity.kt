@@ -49,6 +49,11 @@ class MainActivity : ComponentActivity() {
 fun MainScreen() {
     var height by rememberSaveable { mutableStateOf("") }
     var weight by rememberSaveable { mutableStateOf("") }
+    //RadioButtonSet() 에서 이동
+    var selectedOption by rememberSaveable { mutableStateOf("Normal") }
+    //CheckBoxSet() 에서 이동
+    var checked by rememberSaveable { mutableStateOf(false) }
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -80,55 +85,73 @@ fun MainScreen() {
 
             Spacer(modifier = Modifier.padding(vertical = 16.dp))
             Text(text = "Choose the analysis style.")
-            RadioButtonSet()
+            //상태 호이스팅으로 변경
+            RadioButtonSet(selectedOption = selectedOption, onChange = { selectedOption = it })
 
             Spacer(modifier = Modifier.padding(vertical = 16.dp))
-            CheckBoxSet()
+            CheckBoxSet(checked = checked, onChange = { checked = it })
         }
     }
 }
 
 @Composable
-fun RadioButtonSet() {
+fun RadioButtonSet(selectedOption: String, onChange: (String) -> Unit) {
     val radioOptions = listOf("Simplified", "Normal", "Detailed")
-    var selectedOption by rememberSaveable { mutableStateOf(radioOptions[1]) }
+//    var selectedOption by rememberSaveable { mutableStateOf(radioOptions[1]) }
 
     Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            RadioButton(
-                selected = ("Simplified" == selectedOption),
-                onClick = { selectedOption = "Simplified" }
-            )
-            Text(text = "Simplified")
+        radioOptions.forEach { i ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                RadioButton(
+                    selected = (i == selectedOption),
+                    onClick = { onChange(i) }
+                )
+                Text(text = i)
+            }
         }
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            RadioButton(
-                selected = ("Normal" == selectedOption),
-                onClick = { selectedOption = "Normal" }
-            )
-            Text(text = "Normal")
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            RadioButton(
-                selected = ("Detailed" == selectedOption),
-                onClick = { selectedOption = "Detailed" }
-            )
-            Text(text = "Detailed")
-        }
+//        //foreach 사용하지 않은 경우
+//        Row(
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            RadioButton(
+//                selected = ("Simplified" == selectedOption),
+////                onClick = { selectedOption = "Simplified" }
+//                onClick = { onChange("Simplified") }
+//                //onChange는 위에서 구현할것임!
+//            )
+//            Text(text = "Simplified")
+//        }
+//
+//        Row(
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            RadioButton(
+//                selected = ("Normal" == selectedOption),
+////                onClick = { selectedOption = "Normal" }
+//                onClick = { onChange("Normal") }
+//            )
+//            Text(text = "Normal")
+//        }
+//
+//        Row(
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            RadioButton(
+//                selected = ("Detailed" == selectedOption),
+////                onClick = { selectedOption = "Detailed" }
+//                onClick = { onChange("Detailed") }
+//            )
+//            Text(text = "Detailed")
+//        }
     }
 }
 
 @Composable
-fun CheckBoxSet() {
-    var checked by rememberSaveable { mutableStateOf(false) }
+fun CheckBoxSet(checked: Boolean, onChange: (Boolean) -> Unit) {
+//    var checked by rememberSaveable { mutableStateOf(false) }
     Row(
         modifier = Modifier.padding(horizontal = 32.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
@@ -136,7 +159,7 @@ fun CheckBoxSet() {
         Text("Do you agree to the analysis of your height and weight?")
         Checkbox(
             checked = checked,
-            onCheckedChange = { checked = it },
+            onCheckedChange = { onChange(it) },
             modifier = Modifier.padding(horizontal = 8.dp)
         )
     }

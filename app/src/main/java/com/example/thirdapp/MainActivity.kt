@@ -75,10 +75,9 @@ fun MainScreen() {
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
-            //Spacer() = 공간을 떨어뜨려 주는...
+
             Spacer(modifier = Modifier.padding(vertical = 16.dp))  
             Text(text = "Choose the analysis style.")
-            //여기에 라디오버튼셋 추가
             RadioButtonSet()
         }
     }
@@ -86,25 +85,16 @@ fun MainScreen() {
 
 @Composable
 fun RadioButtonSet() {
-    //아래 3가지 리스트에 대해서...
     val radioOptions = listOf("Simplified", "Normal", "Detailed")
-    //현재 선택되어 있는 것... 여기선 Normal로 초기화함
     var selectedOption by rememberSaveable { mutableStateOf(radioOptions[1]) }
 
-
     Column {
-        //아래 Row 단위로 복사하면 됨..
         Row(
-            //라디오버튼과 텍스트를 y축끼리 가운데정렬...
             verticalAlignment = Alignment.CenterVertically
         ) {
             RadioButton(
-                //selected 는 boolean임,
-                //  아래 조건대로면 selectedOption이 Simplified가 되었는지 확인하고, true라면 거기에 버튼이 표시됨
-                //onClick는 () -> Unit임... 특별히 아무것도 없는 파라미터를 받음...선택을 한 것을 의미
                 selected = ("Simplified" == selectedOption),
                 onClick = { selectedOption = "Simplified" }
-                // 다시 클릭한다고 해서 취소되진 않음
             )
             Text(text = "Simplified")
         }
@@ -128,9 +118,5 @@ fun RadioButtonSet() {
             )
             Text(text = "Detailed")
         }
-        //Detailed 라디오버튼을 누른 순간 onClick 콜백function이 실행되고
-        //  selectedOption에 "Detailed"가 들어감
-        //    그래서 RadioButtonSet() 을 다시 실행시킴
-        // 다시 그릴 때  selected = ("Detailed" == selectedOption) 부분들을 거쳐 true인 부분까지 내려와 실행됨
     }
 }

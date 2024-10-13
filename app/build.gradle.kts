@@ -69,4 +69,8 @@ dependencies {
 
     //5navigation 에서 추가함
     implementation(libs.androidx.navigation.compose)
+
+    //7calculate 에서 추가함
+//    "androidx.lifecycle:lifecycle-viewmodel-compose
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 }

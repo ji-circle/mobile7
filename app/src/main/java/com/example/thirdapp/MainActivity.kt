@@ -113,9 +113,14 @@ class BmiViewModel : ViewModel() {
             "Not Allowed"
         )
         val bmi = weight / (height / 100.0).pow(2.0)
-        if (checked) {
+        if (checked == false) {
             _result.value = resultList[4]
+            return
+        }else{
+//            _result.value = resultList[4]
         }
+        //아래에서 체크를 하지 않은 경우에 return 하는 코드 추가...? TODO 리턴되었을 때 초기화해야하나?
+
         when (selectedOption) {
             "Simplified" -> {
                 if (bmi >= 25.0) _result.value = resultList[2]

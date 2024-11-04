@@ -68,6 +68,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     //5navigation 에서 추가함
+//    implementation("androidx.navigation:navigation-compose:2.8.3")
     implementation(libs.androidx.navigation.compose)
 
     //7calculate 에서 추가함
